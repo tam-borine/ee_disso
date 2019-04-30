@@ -121,34 +121,3 @@ class InputPipeline():
     np.random.shuffle(input_files) # RANDOMNESS introduced
     return self.create_dataset_according_to_set_up(input_files, set_up)
     #perform augmentation if desired with .map on datasets and any concat.
-
-
-# OLD COUNTING CODE
-
-            # train_flooded = 0
-# train_non_flooded = 0
-# test_flooded = 0
-# test_non_flooded = 0
-# for ((xb,yb),(xt,yt)) in tfe.Iterator(tf.data.Dataset.zip((train_dataset, test_dataset))):
-
-#   train_distro = np.unique(yb,return_counts=True)[1]
-#   train_non_flooded += train_distro[0]
-#   try:
-#     train_flooded += train_distro[1]
-#   except:
-#     train_flooded += 0
-    
-    
-#   test_distro = np.unique(yt,return_counts=True)[1]
-#   test_non_flooded += test_distro[0]
-#   try:
-#     test_flooded += test_distro[1]
-#   except:
-#     test_flooded += 0
-
-# print(train_flooded)
-# print(train_non_flooded)
-
-# print("test")
-# print(test_flooded)
-# print(test_non_flooded)
