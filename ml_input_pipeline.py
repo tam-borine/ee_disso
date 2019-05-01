@@ -50,8 +50,6 @@ class InputPipeline():
     features = {
         'VV': tf.FixedLenFeature([256,256,1], tf.float32),
         'constant': tf.FixedLenFeature([1], tf.string),
-  #       'longitude': tf.FixedLenFeature([256,256,1], tf.float32),
-  #       'latitude': tf.FixedLenFeature([256,256,1], tf.float32),
     }
 
     parsed_features = tf.parse_single_example(example_proto, features)
@@ -90,7 +88,6 @@ class InputPipeline():
     dataset = d.map(self._parse_function).shuffle(300, seed=2)
     train_dataset = dataset.skip(50).take(100)
     test_dataset = dataset.skip(150).take(20)
-    # looking at segemntation maps there is some contamination from train into test set... TODO.
     return train_dataset, test_dataset
 
   def create_vanilla_datasets(self, input_files):
@@ -102,9 +99,7 @@ class InputPipeline():
     return train_dataset, test_dataset  
   
   def create_dataset_according_to_set_up(self,input_files, set_up):
-    #NOTE, quantities in returned datasets will be different for each set_up
-      # need some fast way of checking these quantities
-      
+    # Dispatcher pattern - for selecting a different set up.
     create_vanilla_datasets = lambda x: self.create_vanilla_datasets(x)
     create_naive_transfer_datasets = lambda x: self.create_naive_transfer_datasets(x)
     create_toy_datasets = lambda x: self.create_toy_datasets(x)
