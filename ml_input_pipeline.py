@@ -38,6 +38,7 @@ class InputPipeline():
     target_site_code = "EMSR273"
     second_target_site_code = "EMSR258"
     source_sites = [s for s in input_files if target_site_code not in s and second_target_site_code not in s]
+    print(source_sites)
     return tf.data.TFRecordDataset(source_sites)
   
   def make_target_dataset(self,input_files):
@@ -75,12 +76,18 @@ class InputPipeline():
   def only_with_good_ratio(self,image, label):
     is_gd = tf.greater(tf.count_nonzero(label,axis=[0,1]), tf.constant(50,tf.int64))
     return tf.reshape(is_gd,[])
-  
+
+  def create_one_site_only_dataset(self, input_files):
+    site_code = "EMSR150"
+    site = [s for s in input_files if site_code in s]
+    d = tf.data.TFRecordDataset(site)
+    return d.map(self._parse_function)
+
   def create_naive_transfer_datasets(self, input_files):
     source_d = self.make_source_dataset(input_files)
     target_d = self.make_target_dataset(input_files)
     # danger, the shuffle below takes a really long time
-    train_dataset = source_d.map(self._parse_function).shuffle(5000, seed=2)
+    train_dataset = source_d.map(self._parse_function).shuffle(5000, seed=2).skip(500) #we do this to keep the training set sizes the same between vanilla and this.
     test_dataset = target_d.map(self._parse_function).shuffle(5000, seed=2)
     return train_dataset, test_dataset  
 

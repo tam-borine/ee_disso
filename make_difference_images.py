@@ -27,7 +27,7 @@ def get_subsites_df(file_name):
 
 def add_temporal_info(subsites_df):
     subsites_df['Map date'] = subsites_df['Map date'].map(lambda x: datetime.datetime.strptime(x, '%d/%m/%y').date(), na_action='ignore')
-    subsites_df['Before Flood'] = subsites_df['Map date'].map(lambda x: (x - datetime.timedelta(weeks=8)), na_action='ignore')
+    subsites_df['Before Flood'] = subsites_df['Map date'].map(lambda x: (x - datetime.timedelta(weeks=16)), na_action='ignore') # see unresolved issues, some sites in myanmar got 15 week timedelta and everyone else got 8 :/ it was me debugging and this was not the solution so this is kind of tech debt that affects the scientificness of the overall study TODO.
     return subsites_df
 
 def add_spatial_info(subsites_df, poly_df):
